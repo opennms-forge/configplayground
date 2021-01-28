@@ -2,6 +2,8 @@
 package org.opennms.config;
 
 import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Optional;
 
 import org.apache.karaf.shell.api.action.Action;
 import org.apache.karaf.shell.api.action.Argument;
@@ -11,7 +13,7 @@ import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
-@Command(scope = "onmsconfig", name = "updateconfig", description = "updates the config")
+@Command(scope = "onmsconfig", name = "update", description = "updates the config")
 @Service
 public class UpdateConfigCommand implements Action {
 
@@ -23,8 +25,8 @@ public class UpdateConfigCommand implements Action {
 
     @Override
     public Object execute() throws Exception {
-        Configuration config = configurationAdmin.getConfiguration("org.opennms.config.echo");
-        Dictionary props = config.getProperties();
+        Configuration config = configurationAdmin.getConfiguration("org.opennms.config.echo", "?org.opennms");
+        Dictionary props = Optional.ofNullable(config.getProperties()).orElse(new Hashtable<>());
         props.put("myConfig", argument);
         config.update(props);
         System.out.printf("Updated myConfig to %s." , argument);
