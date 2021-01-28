@@ -13,31 +13,16 @@
         http://camel.apache.org/schema/blueprint/camel-blueprint-2.19.1.xsd
 ">
 
-    <!-- Configuration stored in $OPENNMS_HOME/etc/com.company.myplugin.cfg file -->
-    <cm:property-placeholder id="org.opennms.config.command" persistent-id="org.opennms.config.command" update-strategy="reload">
+    <!-- Configuration stored in $OPENNMS_HOME/etc/org.opennms.config.echo.cfg file -->
+    <cm:property-placeholder id="org.opennms.config.echo" persistent-id="org.opennms.config.echo" update-strategy="reload">
         <cm:default-properties>
-            <cm:property name="myConfig" value="the milk is black" />
+            <cm:property name="myConfig" value="The milk is black" />
         </cm:default-properties>
     </cm:property-placeholder>
-
-    <!-- command-bundle xmlns="http://karaf.apache.org/xmlns/shell/v1.0.0">
-        <command name="yourcommand/hello">
-            <action class="org.opennms.config.EchoConfigCommand"/>
-        </command>
-    </command-bundle -->
-
 
     <bean id="config" class="org.opennms.config.Configuration">
         <argument value="${myConfig}"/>
     </bean>
     <service id="configService" interface="org.opennms.config.Configuration" ref="config"/>
 
-    <bean id="persistenceManager" class="org.opennms.config.OpenNMSPersistenceManager">
-    </bean>
-    <service ranking="99999" id="persistenceManagerService" interface="org.apache.felix.cm.PersistenceManager" ref="persistenceManager"/>
-    <service ranking="99999" id="persistenceManagerServiceExport" interface="org.apache.felix.cm.PersistenceManager" ref="persistenceManager">
-        <service-properties>
-            <entry key="service.exported.interfaces" value="*" />
-        </service-properties>
-    </service>
 </blueprint>
