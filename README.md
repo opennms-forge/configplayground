@@ -39,3 +39,7 @@ Here we verify that our concept works in the osgi context.
       props.put("myConfig", argument);
       config.update(props);
    ```
+   This is not an ideal scenario since it triggers again an update to the persistence manager.
+   We can mitigate that by checking if someting really changed and only write then.
+   Another option is to write our own `ConfigurationAdmin` implementation.
+   
