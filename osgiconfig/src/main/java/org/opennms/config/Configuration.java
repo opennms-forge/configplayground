@@ -16,6 +16,6 @@ public class Configuration implements ConfigurationListener {
 
     @Override
     public void configurationEvent(ConfigurationEvent configurationEvent) {
-        System.out.println(configurationEvent);
+        System.out.println("org.opennms.config.Confration received a ConfigurationEvent: " + configurationEvent);
     }
 }

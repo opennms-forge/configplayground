@@ -7,6 +7,10 @@ import org.apache.felix.cm.PersistenceManager;
 import org.apache.felix.cm.file.FilePersistenceManager;
 import org.osgi.framework.BundleContext;
 
+/**
+ * Our own implementation of a PersistenceManager (subclass of FilePersistenceManager).
+ * Must be activated in custom.properties: felix.cm.pm=org.opennms.config.OpenNMSPersistenceManager
+ */
 public class OpenNMSPersistenceManager extends FilePersistenceManager implements PersistenceManager {
 
 
