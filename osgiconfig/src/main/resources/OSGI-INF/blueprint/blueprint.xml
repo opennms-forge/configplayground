@@ -25,4 +25,14 @@
     </bean>
     <service id="configService" interface="org.opennms.config.Configuration" ref="config"/>
 
+    <bean id="avatarServiceFactory" class="org.opennms.config.AvatarServiceFactory">
+        <argument ref="blueprintBundleContext" />
+    </bean>
+    <service interface="org.osgi.service.cm.ManagedServiceFactory" ref="avatarServiceFactory">
+        <service-properties>
+            <entry key="service.pid" value="org.opennms.config.avatar"/>
+        </service-properties>
+    </service>
+
+
 </blueprint>

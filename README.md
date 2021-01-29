@@ -3,15 +3,16 @@
 We want to verify that we can use a central component in OpenNMS as a Configuration Service.
 Here we verify that our concept works in the osgi context.
 
-# Open questions:
-1. Can we hook into the persistence mechanism and use something different than the file storage?
+# Questions to investigate:
+1. Can we hook into the persistence mechanism and use something different from the file storage?
 2. Can we notify OSGI that a configuration has changed?
+3. Can we deal with FactoryConfigurations?
 
 ## Set up Scenario
 * Download and extract apache-karaf-4.2.10
 * Edit startup.properties, add the line `mvn\:org.opennms.config/persistencemanager/1.0.0-SNAPSHOT = 7` This starts the persistencemanager at startup.
 * Edit custom.properties, add the line `felix.cm.pm=org.opennms.config.OpenNMSPersistenceManager`. This defines which persistence manager to use.
-* Go into each of the the 3 subprojects and build them: `mvn install`
+* Go into each of the 3 subprojects and build them: `mvn install`
 * Copy `./target/persistencemanager-1.0.0-SNAPSHOT.jar` to `apache-karaf-4.2.10/system/org/opennms/config/persistencemanager/1.0.0-SNAPSHOT/` (not sure why it doesn't take the jar from the local maven repo)
 * Start Karaf: `./bin/karaf`
 * Install blueprint: `feature:install aries-blueprint`
@@ -28,6 +29,15 @@ Here we verify that our concept works in the osgi context.
   * `onmsconfig:echoconfig`
     Displays the changed configuration:
     `Today my config is: the milk is white.`
+  * `onmsconfig:add-avatar "Luke"` creates a factory configuration
+  * `onmsconfig:add-avatar "Lea"` creates a factory configuration
+  * `onmsconfig:echoconfig`
+    Displays the changed configuration:
+    ```
+    Today my config is: the milk is white.
+    Avatar with name Luke found.
+    Avatar with name Lea found.
+    ```  
 
 # Answers:
 1. Replacing the persistence manager with our own implentation is possible.
@@ -42,4 +52,5 @@ Here we verify that our concept works in the osgi context.
    This is not an ideal scenario since it triggers again an update to the persistence manager.
    We can mitigate that by checking if someting really changed and only write then.
    Another option is to write our own `ConfigurationAdmin` implementation.
+3. We can hook into the FactoryConfiguration mechanism via `ConfigurationAdmin.getFactoryConfiguration()`
    

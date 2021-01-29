@@ -2,6 +2,7 @@ package org.opennms.config;
 
 import java.io.IOException;
 import java.util.Dictionary;
+import java.util.Objects;
 
 import org.apache.felix.cm.PersistenceManager;
 import org.apache.felix.cm.file.FilePersistenceManager;
@@ -28,7 +29,13 @@ public class OpenNMSPersistenceManager extends FilePersistenceManager implements
     }
 
     public void store(String pid, Dictionary props) throws IOException {
+        Objects.requireNonNull(props);
         System.out.printf("OpenNMSPersistenceManager: Writing configuration for pid = %s.\n", pid);
-        super.store(pid, props);
+        if (DictionaryUtil.equalsWithoutRevision(props, super.load(pid))) {
+            // nothing to do.
+            System.out.println("Won't save props since they haven't changed.");
+        } else {
+            super.store(pid, props);
+        }
     }
 }
